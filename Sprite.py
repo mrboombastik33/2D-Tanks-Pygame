@@ -36,12 +36,13 @@ class Sprite(pygame.sprite.Sprite):
     # повороти
     def rotate(self, angle):
         self.rotation += angle # Змінюємо значення атрибуту rotation на значення кута
-        self.image = pygame.transform.rotate(self.image, angle) # Обертаємо наше зображення на цей самий кут
+        self.image = pygame.transform.rotate(self.image, angle)
+        # self.rect = pygame.transform.rotate(self.rect, angle) # Обертаємо наше зображення на цей самий кут
 
     def set_rotation(self, angle):
         self.image = pygame.transform.rotate(self.image, angle - self.rotation) # Зміна поточного напрямку
         self.rotation = angle
-
+        # self.rect = self.image.get_rect(center=self.rect.center)
 
 
 
