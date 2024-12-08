@@ -2,6 +2,7 @@ import pygame as pg
 from Tank import Tank
 import sys
 from Direction import Direction
+from Block import Block
 
 pg.init()
 
@@ -9,13 +10,18 @@ window = pg.display.set_mode((500, 500)) #Встановлюю розмір ві
 
 WIDTH, HEIGHT = pg.display.get_surface().get_size()   #Встановлюю фізичні межі вікна
 
+last_fire_time, fire_interval = 0, 500
+
 run = True
 
 # Створюю основні об'єкти і закидую їх в групу
 tank = Tank('tank_blue.jpg', 100, 100, 2)
 
+obj = Block('tankBody_green.png', 125, 125)
+
 group = pg.sprite.Group()
 group.add(tank)
+group.add(obj)
 
 # Клок для ФПС
 clock = pg.time.Clock()
@@ -23,28 +29,21 @@ clock = pg.time.Clock()
 bullets = []
 
 while run:
-    clock.tick(120)
+    clock.tick(60)
 
     key = pg.key.get_pressed() # key - зчитує натиснуту клавішу
 
+    current_time = pg.time.get_ticks()
+
     # Створення пулі при нажатті пробілу
-    if key[pg.K_SPACE]:
+    if key[pg.K_SPACE] and current_time - last_fire_time >= fire_interval:
+        last_fire_time = current_time
         bullets.append(tank.fire('bulletBlue1.png'))
         group.add(bullets[-1])
 
     # Логіка руху пулі
     for bullet in bullets:
-        if bullet.vector[1] == Direction.RIGHT.value and bullet.rect.x < WIDTH:
-            bullet.move(bullet.vector[0], 0)
-        elif bullet.vector[1] == Direction.LEFT.value and bullet.rect.x > -20:
-            bullet.move(-bullet.vector[0], 0)
-        elif bullet.vector[1] == Direction.UP.value and bullet.rect.y > -20:
-            bullet.move(0, -bullet.vector[0])
-        elif bullet.vector[1] == Direction.DOWN.value and bullet.rect.y < HEIGHT:
-            bullet.move(0, bullet.vector[0])
-        else:
-            bullets.pop(bullets.index(bullet))
-
+        bullet.do_move(bullets)
 
     # Логіка руху танка
     if key[pg.K_RIGHT] and tank.rect.right < WIDTH:
