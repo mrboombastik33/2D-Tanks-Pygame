@@ -1,17 +1,46 @@
-import pygame
+import pygame as pg
 from My_Project_OOP.Bullet import Bullet
 from Sprite import Sprite
 from Direction import Direction
+
+WIDTH, HEIGHT = 500, 500
 
 class Tank(Sprite):
     def __init__(self, image_link, x, y, speed):
         super().__init__(image_link, x, y)
         self.speed = speed
         self.direction = Direction.DOWN.value
+        self.obstacles = 0
 
     def set_rotation(self, direction):
         self.direction = direction
         super().set_rotation(self.direction)
+
+    def do_move(self, direction, group):
+        # Логіка руху танка
+        old_rect = self.rect.copy()
+
+        if direction == Direction.RIGHT and self.rect.right < WIDTH:
+            self.move(self.speed, 0)
+            self.set_rotation(90)
+
+        if direction == Direction.LEFT and self.rect.left > 0:
+            self.move(-self.speed, 0)
+            self.set_rotation(-90)
+
+        if direction == Direction.UP and self.rect.top > 0:
+            self.move(0, -self.speed)
+            self.set_rotation(180)
+
+        if direction == Direction.DOWN and self.rect.bottom < HEIGHT:
+            self.move(0, self.speed)
+            self.set_rotation(0)
+
+        for obj in group:
+            if obj is not self and self.check_collision(obj):
+                self.rect = old_rect
+                return
+
 
     def fire(self, image_link):
         bullet_offsets = {
@@ -23,33 +52,6 @@ class Tank(Sprite):
         # Отримати координати пулі в залежності від її поточного місцезнаходження
         bullet_coord = bullet_offsets[self.direction]
 
-        bullet = Bullet(image_link, bullet_coord[0], bullet_coord[1], (3, self.direction))
+        bullet = Bullet(image_link, bullet_coord[0], bullet_coord[1], (3, self.direction), self)
         return bullet
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

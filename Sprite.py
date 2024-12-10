@@ -1,5 +1,8 @@
 import pygame
 
+global scaling
+
+scaling = 0.75
 class Sprite(pygame.sprite.Sprite):
     def __init__(self, image_link, x, y):
         super().__init__()
@@ -12,7 +15,7 @@ class Sprite(pygame.sprite.Sprite):
         self.rotation = 0
 
     # Малювання об'єкту у вікні
-    def draw(self, window):
+    def draw(self, window: pygame.Surface):
         window.blit(self.image, self.rect)
 
     # Отримання поточної позиції
@@ -28,10 +31,9 @@ class Sprite(pygame.sprite.Sprite):
     def move(self, x, y):
         self.set_pos(self.rect.x + x, self.rect.y + y)
 
-
     # Перевірка колізії
     def check_collision(self, sprite2):
-        return sprite2.rect.colliderect(self.rect)
+        return self.rect.colliderect(sprite2.rect)
 
     # повороти
     def rotate(self, angle):
