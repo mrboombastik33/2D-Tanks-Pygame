@@ -12,7 +12,7 @@ class Block(Sprite):
         self.breakable = breakable
 
     def __str__(self):
-        return f"Block(position=({self.rect.x}, {self.rect.y}))"
+        return f"Block(type={self.block_type}, position=({self.rect.x}, {self.rect.y}))"
 
 
 

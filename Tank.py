@@ -6,11 +6,12 @@ from settings import *
 
 
 class Tank(Sprite):
-    def __init__(self, image_link, x, y, speed):
+    def __init__(self, image_link, x, y, speed, number):
         super().__init__(image_link, x, y)
         self.speed = speed
         self.direction = Direction.DOWN.value
-        self.obstacles = 0
+        self.number = number
+        self.last_fire_time = 0
 
     def set_rotation(self, direction):
         self.direction = direction

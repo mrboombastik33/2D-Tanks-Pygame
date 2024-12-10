@@ -34,7 +34,6 @@ class Bullet(Sprite):
             if obj is not self and not self.rect.colliderect(self.shooter) and self.rect.colliderect(obj.rect):
                 if isinstance(obj, Block) and obj.breakable == 0:
                     obj.kill()
-
                 return True
 
 

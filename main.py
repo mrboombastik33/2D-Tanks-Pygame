@@ -4,6 +4,10 @@ from Tank import Tank
 from Direction import Direction
 from Block import Block
 from settings import *
+import json
+from calling_functions import *
+
+
 
 class Game:
     def __init__(self):
@@ -20,17 +24,16 @@ class Game:
         self.bullets = []
         self.list_of_blocks = []
 
-        self.last_fire_time = 0
 
         self.map = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+                    [0, 0, 2, 0, 0, 1, 0, 2, 0, 0],
+                    [0, 0, 2, 0, 0, 0, 0, 2, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+                    [0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
                     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 
         # Загружаємо ассети програми
@@ -38,19 +41,23 @@ class Game:
 
     def init_objects(self):
         self.create_map_blocks()
-        print(self.all_sprites)
 
         # Танк
-        self.tank = Tank(f'{SPRITE_IMAGES}/tank_blue.png', 100, 100, 2)
-        self.all_sprites.add(self.tank)
-        self.tanks.append(self.tank)
+        tank = Tank(f'{SPRITE_IMAGES}/tank_blue.png', 100, 100, 2, 1)
+        tank2 = Tank(f'{SPRITE_IMAGES}/tank_red.png', 300, 300, 2, 2)
 
-        # Статичні блоки
-        unbreakable = Block(f'{SPRITE_IMAGES}/tankBody_green.png', 200, 200, 1)
-        breakable = Block(f'{SPRITE_IMAGES}/sandbagBrown.png', 300, 300, 0)
-        self.all_sprites.add(unbreakable, breakable)
-        self.list_of_blocks.append(unbreakable)
-        self.list_of_blocks.append(breakable)
+        self.tanks.append(tank)
+        self.all_sprites.add(tank)
+
+        self.tanks.append(tank2)
+        self.all_sprites.add(tank2)
+
+        # # Статичні блоки
+        # unbreakable = Block(f'{SPRITE_IMAGES}/tankBody_green.png', 200, 200, 1)
+        # breakable = Block(f'{SPRITE_IMAGES}/sandbagBrown.png', 300, 300, 0)
+        # self.all_sprites.add(unbreakable, breakable)
+        # self.list_of_blocks.append(unbreakable)
+        # self.list_of_blocks.append(breakable)
 
     def _create_boundary(self):
         for i in range(len(self.map)):
@@ -62,11 +69,13 @@ class Game:
         self._create_boundary()
         for i in range(len(self.map)):
             for j in range(len(self.map[i])):
+                x = j * cell_size
+                y = i * cell_size
                 if self.map[i][j] == 1:
-                    x = j * cell_size
-                    y = i * cell_size
-                    block = Block(f'{SPRITE_IMAGES}/sandbagBrown.png', x, y, 1)
-                    self.list_of_blocks.append(block)
+                    block = Block(f'{SPRITE_IMAGES}/barricadeWood.png', x, y, 1)
+                if self.map[i][j] == 2:
+                    block = Block(f'{SPRITE_IMAGES}/sandbagBrown.png', x, y, 0)
+                self.list_of_blocks.append(block)
         self.all_sprites.add(self.list_of_blocks)
 
     def run(self):
@@ -85,27 +94,16 @@ class Game:
 
     def update(self):
         self.screen.fill((80, 80, 80))
-
         key = pg.key.get_pressed()
-        direction = 0
 
         # Рух танку
         for tank in self.tanks:
-            if key[pg.K_UP]:
-                direction = Direction.UP
-            if key[pg.K_DOWN]:
-                direction = Direction.DOWN
-            if key[pg.K_LEFT]:
-                direction = Direction.LEFT
-            if key[pg.K_RIGHT]:
-                direction = Direction.RIGHT
+            direction = get_tank_direction(key, tank.number)
             tank.do_move(direction, self.all_sprites)
 
             # Механіка пострілу
-            current_time = pg.time.get_ticks()
-            if key[pg.K_SPACE] and current_time - self.last_fire_time >= FIRE_INTERVAL:
-                self.last_fire_time = current_time
-                bullet = self.tank.fire(f'{SPRITE_IMAGES}/bulletBlue1.png')
+            bullet = tank_shoot(tank, key, tank.number)
+            if bullet:
                 self.bullets.append(bullet)
                 self.all_sprites.add(bullet)
 
@@ -117,31 +115,7 @@ class Game:
 
         self.all_sprites.draw(self.screen)
 
-    # def draw(self):
-    #     # Колір заднього фону
-    #     self.screen.fill((80, 80, 80))
-    #
-    #     # Намалювати всі спрацтів
-    #     self.all_sprites.draw(self.screen)
-    #
-    #     # Апдейтимо кадр
-    #     pg.display.update()
-
 
 if __name__ == '__main__':
     game = Game()
     game.run()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
