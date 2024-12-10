@@ -2,8 +2,8 @@ import pygame as pg
 from My_Project_OOP.Bullet import Bullet
 from Sprite import Sprite
 from Direction import Direction
+from settings import *
 
-WIDTH, HEIGHT = 500, 500
 
 class Tank(Sprite):
     def __init__(self, image_link, x, y, speed):
@@ -20,19 +20,19 @@ class Tank(Sprite):
         # Логіка руху танка
         old_rect = self.rect.copy()
 
-        if direction == Direction.RIGHT and self.rect.right < WIDTH:
+        if direction == Direction.RIGHT:
             self.move(self.speed, 0)
             self.set_rotation(90)
 
-        if direction == Direction.LEFT and self.rect.left > 0:
+        if direction == Direction.LEFT:
             self.move(-self.speed, 0)
             self.set_rotation(-90)
 
-        if direction == Direction.UP and self.rect.top > 0:
+        if direction == Direction.UP:
             self.move(0, -self.speed)
             self.set_rotation(180)
 
-        if direction == Direction.DOWN and self.rect.bottom < HEIGHT:
+        if direction == Direction.DOWN:
             self.move(0, self.speed)
             self.set_rotation(0)
 

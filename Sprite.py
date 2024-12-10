@@ -1,6 +1,6 @@
 import pygame
-
 global scaling
+from settings import *
 
 scaling = 0.75
 class Sprite(pygame.sprite.Sprite):
