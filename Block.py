@@ -11,6 +11,9 @@ class Block(Sprite):
         self.rect = self.rect.scale_by(SCALING_BLOCKS)
         self.breakable = breakable
 
+    def __str__(self):
+        return f"Block(position=({self.rect.x}, {self.rect.y}))"
+
 
 
 
