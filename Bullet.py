@@ -4,7 +4,6 @@ from Direction import Direction
 from Block import Block
 from settings import *
 
-
 class Bullet(Sprite):
     def __init__(self, image_link, x, y, vector, shooter):
         super().__init__(image_link, x, y)
@@ -30,23 +29,13 @@ class Bullet(Sprite):
             self.kill()
 
     def check_collision(self, group):
+        from Tank import Tank
         for obj in group:
             if obj is not self and not self.rect.colliderect(self.shooter) and self.rect.colliderect(obj.rect):
                 if isinstance(obj, Block) and obj.breakable == 0:
                     obj.kill()
+                if isinstance(obj, Tank) and obj.health >= 0:
+                    obj.receive_damage()
                 return True
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

@@ -44,28 +44,5 @@ class Sprite(pygame.sprite.Sprite):
     def set_rotation(self, angle):
         self.image = pygame.transform.rotate(self.image, angle - self.rotation) # Зміна поточного напрямку
         self.rotation = angle
-        # self.rect = self.image.get_rect(center=self.rect.center)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

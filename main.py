@@ -42,8 +42,8 @@ class Game:
         self.create_map_blocks()
 
         # Танк
-        tank = Tank(f'{SPRITE_IMAGES}/tank_blue.png', 100, 100, 2, 1)
-        tank2 = Tank(f'{SPRITE_IMAGES}/tank_red.png', 300, 300, 2, 2)
+        tank = Tank(f'{SPRITE_IMAGES}/tank_blue.png', 100, 100, 2, 1, 3)
+        tank2 = Tank(f'{SPRITE_IMAGES}/tank_red.png', 300, 300, 2, 2, 3)
 
         self.tanks.append(tank)
         self.all_sprites.add(tank)
@@ -102,13 +102,14 @@ class Game:
                 self.bullets.append(bullet)
                 self.all_sprites.add(bullet)
 
-
             # Механіка руху кулі
             for index, bullet in enumerate(self.bullets):
                 if bullet.do_move(self.bullets, self.all_sprites):
                     bullet.kill()
                     self.bullets.pop(index)
 
+            if tank.health == 0:
+                tank.kill()
 
         timer_surf = self.game_timer.render()
         self.all_sprites.draw(self.screen)

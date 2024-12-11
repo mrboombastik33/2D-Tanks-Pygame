@@ -5,12 +5,13 @@ from Direction import Direction
 from settings import *
 
 class Tank(Sprite):
-    def __init__(self, image_link, x, y, speed, number):
+    def __init__(self, image_link, x, y, speed, number, health):
         super().__init__(image_link, x, y)
         self.speed = speed
         self.direction = Direction.DOWN.value
         self.number = number
         self.last_fire_time = 0
+        self.health = health
 
     def set_rotation(self, direction):
         self.direction = direction
@@ -53,4 +54,7 @@ class Tank(Sprite):
 
         bullet = Bullet(image_link, bullet_coord[0], bullet_coord[1], (3, self.direction), self)
         return bullet
+
+    def receive_damage(self):
+        self.health -= 1
 
