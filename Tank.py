@@ -4,7 +4,6 @@ from Sprite import Sprite
 from Direction import Direction
 from settings import *
 
-
 class Tank(Sprite):
     def __init__(self, image_link, x, y, speed, number):
         super().__init__(image_link, x, y)
@@ -41,7 +40,6 @@ class Tank(Sprite):
             if obj is not self and self.check_collision(obj):
                 self.rect = old_rect
                 return
-
 
     def fire(self, image_link):
         bullet_offsets = {

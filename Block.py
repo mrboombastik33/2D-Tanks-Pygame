@@ -2,8 +2,6 @@ import pygame
 from Sprite import Sprite
 from settings import *
 
-
-
 class Block(Sprite):
     def __init__(self, image_link, x, y, breakable):
         super().__init__(image_link, x, y)

@@ -4,14 +4,13 @@ from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QLabel,
     QSpinBox, QPushButton, QWidget, QFormLayout
 )
-
-from PyQt6.QtCore import Qt
+from main import Game
 
 class MainMenu(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Tank Game Settings")
+        self.setWindowTitle(f"Ігрові налаштування гри 'Танки'")
         self.setGeometry(100, 100, 300, 200)
 
         # Центральний віджет і макет
@@ -23,19 +22,19 @@ class MainMenu(QMainWindow):
         # Макет для введення
         form_layout = QFormLayout()
 
-        # Timer setting
+        # Визначення часу на один раунд
         self.timer_label = QLabel("Кількість секунд:")
         self.timer_spinbox = QSpinBox()
-        self.timer_spinbox.setRange(10, 30)  # Minimum 10 seconds, max 10 minutes
-        self.timer_spinbox.setValue(120)  # Default value
+        self.timer_spinbox.setRange(5, 40)  # Мінімальна к-сть секунд - 30, максимальна - 60
+        self.timer_spinbox.setValue(30)  # Значення за замовчуванням
         form_layout.addRow(self.timer_label, self.timer_spinbox)
 
-        # Tank count setting
-        self.tank_count_label = QLabel("Кількість танків:")
-        self.tank_count_spinbox = QSpinBox()
-        self.tank_count_spinbox.setRange(1, 10)  # Мінімум 1 танк, максимум - невизначено
-        self.tank_count_spinbox.setValue(2)  # Дефолтне значення
-        form_layout.addRow(self.tank_count_label, self.tank_count_spinbox)
+        # Вибір раундів
+        self.round_count = QLabel("Кількість раундів:")
+        self.round_count_spinbox = QSpinBox()
+        self.round_count_spinbox.setRange(1, 10)  # Мінімум 1 раунд, максимум 10
+        self.round_count_spinbox.setValue(3)  # Дефолтне значення
+        form_layout.addRow(self.round_count, self.round_count_spinbox)
 
         layout.addLayout(form_layout)
 
@@ -47,24 +46,27 @@ class MainMenu(QMainWindow):
         button_layout.addWidget(self.quit_button)
         layout.addLayout(button_layout)
 
-        # Button actions
+        # Початок кнопок
         self.start_button.clicked.connect(self.start_game)
         self.quit_button.clicked.connect(self.close)
 
     def start_game(self):
-        # Retrieve settings
+        # Отримати налаштування
         timer = self.timer_spinbox.value()
-        tank_count = self.tank_count_spinbox.value()
+        round_count = self.round_count_spinbox.value()
 
-        # For now, just print the settings (or pass them to your game logic)
-        print(f"Starting game with timer: {timer} seconds and {tank_count} tanks.")
+        # Закрити меню
+        self.close()
 
-        # TODO: Integrate with the game class
-        self.close()  # Закрити меню та почати гру
+        # Почати гру
+        game = Game(timer, round_count)
+        game.run()
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
     main_menu = MainMenu()
     main_menu.show()
     sys.exit(app.exec())
+
 

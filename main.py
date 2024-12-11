@@ -4,26 +4,25 @@ from Tank import Tank
 from Direction import Direction
 from Block import Block
 from settings import *
-import json
 from calling_functions import *
-
-
+from Timer import Timer
 
 class Game:
-    def __init__(self):
+    def __init__(self, round_time, round_count):
         pg.init()
+        pg.display.set_caption('Танки')
 
         # Ініціалізація гри
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         self.clock = pg.time.Clock()
         self.running = True
+        self.game_timer = Timer(round_time)
 
         # Групи та списки для об'єктів
         self.all_sprites = pg.sprite.Group()
         self.tanks = []
         self.bullets = []
         self.list_of_blocks = []
-
 
         self.map = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
@@ -51,13 +50,6 @@ class Game:
 
         self.tanks.append(tank2)
         self.all_sprites.add(tank2)
-
-        # # Статичні блоки
-        # unbreakable = Block(f'{SPRITE_IMAGES}/tankBody_green.png', 200, 200, 1)
-        # breakable = Block(f'{SPRITE_IMAGES}/sandbagBrown.png', 300, 300, 0)
-        # self.all_sprites.add(unbreakable, breakable)
-        # self.list_of_blocks.append(unbreakable)
-        # self.list_of_blocks.append(breakable)
 
     def _create_boundary(self):
         for i in range(len(self.map)):
@@ -91,6 +83,9 @@ class Game:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.running = False
+            if event.type == pg.USEREVENT:
+                if not self.game_timer.update_timer(pg.USEREVENT):  # Перевірка чи гра закінчилась
+                    self.running = False  # Закінчення гри
 
     def update(self):
         self.screen.fill((80, 80, 80))
@@ -102,10 +97,11 @@ class Game:
             tank.do_move(direction, self.all_sprites)
 
             # Механіка пострілу
-            bullet = tank_shoot(tank, key, tank.number)
+            bullet = tank_shoot(tank, key)
             if bullet:
                 self.bullets.append(bullet)
                 self.all_sprites.add(bullet)
+
 
             # Механіка руху кулі
             for index, bullet in enumerate(self.bullets):
@@ -113,9 +109,7 @@ class Game:
                     bullet.kill()
                     self.bullets.pop(index)
 
+
+        timer_surf = self.game_timer.render()
         self.all_sprites.draw(self.screen)
-
-
-if __name__ == '__main__':
-    game = Game()
-    game.run()
+        self.screen.blit(timer_surf, (250, 60))

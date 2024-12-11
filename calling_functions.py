@@ -1,9 +1,7 @@
 import pygame as pg
 from Direction import Direction
-import json
 from settings import *
 
-# Load the JSON file
 def load_controls(file_path):
     with open(file_path, "r") as file:
         data = json.load(file)
@@ -25,15 +23,15 @@ def get_tank_direction(key, number):
     return direction
 
 
-def tank_shoot(tank, key, number):
+def tank_shoot(tank, key):
     current_time = pg.time.get_ticks()
 
     shooter1, shooter2 = load_controls(JSON_FILE)
-    tank_controls = shooter1 if number == 1 else shooter2
+    tank_controls = shooter1 if tank.number == 1 else shooter2
 
     if key[tank_controls["SHOOT"]] and current_time - tank.last_fire_time >= FIRE_INTERVAL:
         tank.last_fire_time = current_time
-        bullet = tank.fire(f'{SPRITE_IMAGES}/bulletBlue1.png')
+        bullet = tank.fire(f'{SPRITE_IMAGES}/bulletBlue1.png') if tank.number == 1 else tank.fire(f'{SPRITE_IMAGES}/bulletRed1.png')
         return bullet
     return None
 
