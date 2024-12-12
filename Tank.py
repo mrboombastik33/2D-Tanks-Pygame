@@ -8,6 +8,7 @@ class Tank(Sprite):
     def __init__(self, image_link, x, y, speed, number, health):
         super().__init__(image_link, x, y)
         self.speed = speed
+        self.original_image = self.image  # Зберігаємо для ресету
         self.direction = Direction.DOWN.value
         self.number = number
         self.last_fire_time = 0
@@ -57,4 +58,10 @@ class Tank(Sprite):
 
     def receive_damage(self):
         self.health -= 1
+
+    def reset(self):
+        self.rect.topleft = (self.rect.x, self.rect.y)  # Ресетимо на початкову позицію
+        self.health = 3  # Ресетимо здоров'я
+        self.image = self.original_image  # Reset to the original image if altered
+
 

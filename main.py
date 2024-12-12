@@ -8,15 +8,17 @@ from calling_functions import *
 from Timer import Timer
 
 class Game:
-    def __init__(self, round_time, round_count):
+    def __init__(self, round_time, total_rounds):
         pg.init()
         pg.display.set_caption('Танки')
-
         # Ініціалізація гри
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         self.clock = pg.time.Clock()
         self.running = True
-        self.game_timer = Timer(round_time)
+        self.current_round = 0
+        self.round_time = round_time
+        self.total_rounds = total_rounds
+        self.game_timer = None
 
         # Групи та списки для об'єктів
         self.all_sprites = pg.sprite.Group()
@@ -51,6 +53,7 @@ class Game:
         self.tanks.append(tank2)
         self.all_sprites.add(tank2)
 
+
     def _create_boundary(self):
         for i in range(len(self.map)):
             for j in range(len(self.map[i])):
@@ -70,12 +73,28 @@ class Game:
                 self.list_of_blocks.append(block)
         self.all_sprites.add(self.list_of_blocks)
 
+    def start_round(self):
+        self.current_round += 1
+        self.game_timer = Timer(self.round_time)
+
+        # Ресет об'єктів
+        for tank in self.tanks:
+            tank.reset()  # Ресетимо позицію танка
+
+        for bullet in self.bullets:
+            bullet.kill()
+        self.bullets = []
+
+        self.all_sprites = pg.sprite.Group(self.tanks + self.list_of_blocks)
+
     def run(self):
-        while self.running:
-            self.clock.tick(FPS)
-            self.handle_events()
-            self.update()
-            pg.display.update()
+        while self.current_round < self.total_rounds:
+            self.start_round()
+            while self.running:
+                self.clock.tick(FPS)
+                self.handle_events()
+                self.update()
+                pg.display.update()
         pg.quit()
         sys.exit()
 
