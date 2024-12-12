@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import (
     QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QLabel,
     QSpinBox, QPushButton, QWidget, QFormLayout
 )
+from Winners import *
 from main import Game
 
 class MainMenu(QMainWindow):
@@ -25,15 +26,15 @@ class MainMenu(QMainWindow):
         # Визначення часу на один раунд
         self.timer_label = QLabel("Кількість секунд:")
         self.timer_spinbox = QSpinBox()
-        self.timer_spinbox.setRange(5, 40)  # Мінімальна к-сть секунд - 30, максимальна - 60
-        self.timer_spinbox.setValue(30)  # Значення за замовчуванням
+        self.timer_spinbox.setRange(10, 30)  # Мінімальна к-сть секунд - 30, максимальна - 60
+        self.timer_spinbox.setValue(15)  # Значення за замовчуванням
         form_layout.addRow(self.timer_label, self.timer_spinbox)
 
         # Вибір раундів
         self.round_count = QLabel("Кількість раундів:")
         self.round_count_spinbox = QSpinBox()
         self.round_count_spinbox.setRange(1, 10)  # Мінімум 1 раунд, максимум 10
-        self.round_count_spinbox.setValue(3)  # Дефолтне значення
+        self.round_count_spinbox.setValue(1)  # Дефолтне значення
         form_layout.addRow(self.round_count, self.round_count_spinbox)
 
         layout.addLayout(form_layout)
@@ -56,11 +57,19 @@ class MainMenu(QMainWindow):
         round_count = self.round_count_spinbox.value()
 
         # Закрити меню
-        self.close()
+        # self.close()
 
         # Почати гру
         game = Game(timer, round_count)
-        game.run()
+        winners = game.run()
+        self.show_winners(winners)
+
+
+    def show_winners(self, winners):
+        self.show()
+        self.dialog = WinnersDialog(winners)
+        self.dialog.exec()
+        # dialog.show()
 
 
 if __name__ == '__main__':

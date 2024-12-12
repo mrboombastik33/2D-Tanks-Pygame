@@ -1,18 +1,18 @@
-import pygame as pg
-from My_Project_OOP.Bullet import Bullet
-from Sprite import Sprite
-from Direction import Direction
-from settings import *
+from My_Project_OOP.Sprites.Bullet import Bullet
+from My_Project_OOP.Sprites.Sprite import Sprite
+from My_Project_OOP.additional import Direction
+from My_Project_OOP.additional.settings import *
+
 
 class Tank(Sprite):
     def __init__(self, image_link, x, y, speed, number, health):
         super().__init__(image_link, x, y)
-        self.speed = speed
-        self.original_image = self.image  # Зберігаємо для ресету
+        self.__speed = speed
         self.direction = Direction.DOWN.value
         self.number = number
         self.last_fire_time = 0
-        self.health = health
+        self.__health = health
+        self.starting_rect = self.rect.copy()
 
     def set_rotation(self, direction):
         self.direction = direction
@@ -23,19 +23,19 @@ class Tank(Sprite):
         old_rect = self.rect.copy()
 
         if direction == Direction.RIGHT:
-            self.move(self.speed, 0)
+            self.move(self.__speed, 0)
             self.set_rotation(90)
 
         if direction == Direction.LEFT:
-            self.move(-self.speed, 0)
+            self.move(-self.__speed, 0)
             self.set_rotation(-90)
 
         if direction == Direction.UP:
-            self.move(0, -self.speed)
+            self.move(0, -self.__speed)
             self.set_rotation(180)
 
         if direction == Direction.DOWN:
-            self.move(0, self.speed)
+            self.move(0, self.__speed)
             self.set_rotation(0)
 
         for obj in group:
@@ -57,11 +57,14 @@ class Tank(Sprite):
         return bullet
 
     def receive_damage(self):
-        self.health -= 1
+        self.__health -= 1
 
-    def reset(self):
-        self.rect.topleft = (self.rect.x, self.rect.y)  # Ресетимо на початкову позицію
-        self.health = 3  # Ресетимо здоров'я
-        self.image = self.original_image  # Reset to the original image if altered
+    def get_health(self):
+        return self.__health
 
+    def get_speed(self):
+        return self.__speed
+
+    def get_number(self):
+        return self.number
 

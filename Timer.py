@@ -9,12 +9,10 @@ class Timer:
     def update_timer(self, event_type): # Зміна часу в таймері
         if not event_type == pg.USEREVENT:
             return False
-
         self.time -= 1
         if self.time <= 0:
             self.time = 0
             return False  # Закінчення таймера
-        print(self.time)
         return True
 
     def render(self):

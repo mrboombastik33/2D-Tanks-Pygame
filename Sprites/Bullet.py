@@ -1,16 +1,16 @@
 import pygame
-from Sprite import Sprite
-from Direction import Direction
-from Block import Block
-from settings import *
+from My_Project_OOP.Sprites.Sprite import Sprite
+from My_Project_OOP.Sprites import Block
+from My_Project_OOP.additional.Direction import Direction
+from My_Project_OOP.additional.settings import *
 
 class Bullet(Sprite):
     def __init__(self, image_link, x, y, vector, shooter):
         super().__init__(image_link, x, y)
-        self.image = pygame.transform.scale_by(self.image, SCALING_BULLET)
+        self.__image = pygame.transform.scale_by(self.image, SCALING_BULLET)
         self.vector = vector
         self.set_rotation(vector[1])
-        self.shooter = shooter
+        self.__shooter = shooter
 
     def do_move(self, bullets, group):
         if self.check_collision(group):
@@ -29,12 +29,12 @@ class Bullet(Sprite):
             self.kill()
 
     def check_collision(self, group):
-        from Tank import Tank
+        from My_Project_OOP.Sprites.Tank import Tank
         for obj in group:
-            if obj is not self and not self.rect.colliderect(self.shooter) and self.rect.colliderect(obj.rect):
+            if obj is not self and not self.rect.colliderect(self.__shooter) and self.rect.colliderect(obj.rect):
                 if isinstance(obj, Block) and obj.breakable == 0:
                     obj.kill()
-                if isinstance(obj, Tank) and obj.health >= 0:
+                if isinstance(obj, Tank) and obj.get_health() >= 0:
                     obj.receive_damage()
                 return True
 

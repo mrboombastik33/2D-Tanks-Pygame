@@ -1,6 +1,6 @@
 import pygame
-from Sprite import Sprite
-from settings import *
+from My_Project_OOP.Sprites.Sprite import Sprite
+from My_Project_OOP.additional.settings import *
 
 class Block(Sprite):
     def __init__(self, image_link, x, y, breakable):

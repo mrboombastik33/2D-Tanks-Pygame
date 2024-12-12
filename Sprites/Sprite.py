@@ -1,8 +1,5 @@
 import pygame
-global scaling
-from settings import *
 
-scaling = 0.75
 class Sprite(pygame.sprite.Sprite):
     def __init__(self, image_link, x, y):
         super().__init__()
@@ -12,7 +9,7 @@ class Sprite(pygame.sprite.Sprite):
         self.size = self.image.get_size()
         self.rect.x = x
         self.rect.y = y
-        self.rotation = 0
+        self.__rotation = 0
 
     # Малювання об'єкту у вікні
     def draw(self, window: pygame.Surface):
@@ -37,12 +34,11 @@ class Sprite(pygame.sprite.Sprite):
 
     # повороти
     def rotate(self, angle):
-        self.rotation += angle # Змінюємо значення атрибуту rotation на значення кута
+        self.__rotation += angle # Змінюємо значення атрибуту rotation на значення кута
         self.image = pygame.transform.rotate(self.image, angle)
-        # self.rect = pygame.transform.rotate(self.rect, angle) # Обертаємо наше зображення на цей самий кут
 
     def set_rotation(self, angle):
-        self.image = pygame.transform.rotate(self.image, angle - self.rotation) # Зміна поточного напрямку
-        self.rotation = angle
+        self.image = pygame.transform.rotate(self.image, angle - self.__rotation) # Зміна поточного напрямку
+        self.__rotation = angle
 
 

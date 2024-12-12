@@ -1,22 +1,19 @@
-import pygame as pg
 import sys
-from Tank import Tank
-from Direction import Direction
-from Block import Block
-from settings import *
+from My_Project_OOP.Sprites.Tank import Tank
+from My_Project_OOP.Sprites.Block import Block
 from calling_functions import *
 from Timer import Timer
 
 class Game:
     def __init__(self, round_time, total_rounds):
+        # Ініціалізація гри
         pg.init()
         pg.display.set_caption('Танки')
-        # Ініціалізація гри
         self.screen = pg.display.set_mode((WIDTH, HEIGHT))
         self.clock = pg.time.Clock()
-        self.running = True
+        self.__running = True
         self.current_round = 0
-        self.round_time = round_time
+        self.__round_time = round_time
         self.total_rounds = total_rounds
         self.game_timer = None
 
@@ -25,6 +22,7 @@ class Game:
         self.tanks = []
         self.bullets = []
         self.list_of_blocks = []
+        self.winners = []
 
         self.map = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                     [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
@@ -41,27 +39,26 @@ class Game:
         self.init_objects()
 
     def init_objects(self):
+        # Створення спрайтів та додавання їх в групи
+        self.list_of_blocks = []
         self.create_map_blocks()
 
-        # Танк
-        tank = Tank(f'{SPRITE_IMAGES}/tank_blue.png', 100, 100, 2, 1, 3)
-        tank2 = Tank(f'{SPRITE_IMAGES}/tank_red.png', 300, 300, 2, 2, 3)
+        tank1 = Tank(f'{SPRITE_IMAGES}/tank_blue.png', 90, 100, 2, 1, 3)
+        tank2 = Tank(f'{SPRITE_IMAGES}/tank_red.png', 600, 500, 2, 2, 3)
 
-        self.tanks.append(tank)
-        self.all_sprites.add(tank)
-
-        self.tanks.append(tank2)
+        self.tanks = [tank1, tank2]
+        self.all_sprites.add(tank1)
         self.all_sprites.add(tank2)
 
 
-    def _create_boundary(self):
+    def __create_boundary(self): # Створення границі мапи (алгоритм)
         for i in range(len(self.map)):
             for j in range(len(self.map[i])):
                 if i == 0 or i == 9 or j == 0 or j == 9:
                     self.map[i][j] = 1
 
-    def create_map_blocks(self):
-        self._create_boundary()
+    def create_map_blocks(self): # Заповнення мапи
+        self.__create_boundary()
         for i in range(len(self.map)):
             for j in range(len(self.map[i])):
                 x = j * cell_size
@@ -73,38 +70,45 @@ class Game:
                 self.list_of_blocks.append(block)
         self.all_sprites.add(self.list_of_blocks)
 
-    def start_round(self):
+    def start_round(self): #Початок нового раунда
         self.current_round += 1
-        self.game_timer = Timer(self.round_time)
 
-        # Ресет об'єктів
-        for tank in self.tanks:
-            tank.reset()  # Ресетимо позицію танка
+        self.init_objects()
 
-        for bullet in self.bullets:
-            bullet.kill()
-        self.bullets = []
+        self.game_timer = Timer(self.__round_time)
 
+        self.__running = True
+
+        # Об'єднюємо всі спрайти в групу
         self.all_sprites = pg.sprite.Group(self.tanks + self.list_of_blocks)
 
     def run(self):
         while self.current_round < self.total_rounds:
             self.start_round()
-            while self.running:
+            while self.__running:
                 self.clock.tick(FPS)
                 self.handle_events()
                 self.update()
                 pg.display.update()
-        pg.quit()
-        sys.exit()
 
-    def handle_events(self):
+        pg.quit()
+        return self.winners
+
+    def handle_events(self): #
         for event in pg.event.get():
             if event.type == pg.QUIT:
-                self.running = False
+                self.__running = False
             if event.type == pg.USEREVENT:
-                if not self.game_timer.update_timer(pg.USEREVENT):  # Перевірка чи гра закінчилась
-                    self.running = False  # Закінчення гри
+                if not self.game_timer.update_timer(pg.USEREVENT):  # Перевірка таймера
+                    self.winners.append(0)
+                    self.reset_game()
+
+
+    def reset_game(self):
+        self.tanks.clear()
+        self.bullets.clear()
+        self.list_of_blocks.clear()
+        self.__running = False
 
     def update(self):
         self.screen.fill((80, 80, 80))
@@ -127,9 +131,17 @@ class Game:
                     bullet.kill()
                     self.bullets.pop(index)
 
-            if tank.health == 0:
-                tank.kill()
+            # Видалити об'єкт якщо здоров'я танка дорівнює нулю
+            if tank.get_health() == 0:
+                self.tanks.pop(self.tanks.index(tank))
+                self.winners.append(self.tanks[0].get_number())
+                self.reset_game()
+
 
         timer_surf = self.game_timer.render()
         self.all_sprites.draw(self.screen)
         self.screen.blit(timer_surf, (250, 60))
+
+    def get_round_time(self):
+        return self.__round_time
+
