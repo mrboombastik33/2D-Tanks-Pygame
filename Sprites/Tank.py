@@ -1,7 +1,7 @@
-from My_Project_OOP.Sprites.Bullet import Bullet
-from My_Project_OOP.Sprites.Sprite import Sprite
-from My_Project_OOP.additional import Direction
-from My_Project_OOP.additional.settings import *
+from Sprites.Bullet import Bullet
+from Sprites.Sprite import Sprite
+from additional import Direction
+from additional.settings import *
 
 
 class Tank(Sprite):

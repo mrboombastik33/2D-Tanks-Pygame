@@ -26,7 +26,7 @@ class MainMenu(QMainWindow):
         # Визначення часу на один раунд
         self.timer_label = QLabel("Кількість секунд:")
         self.timer_spinbox = QSpinBox()
-        self.timer_spinbox.setRange(10, 30)  # Мінімальна к-сть секунд - 30, максимальна - 60
+        self.timer_spinbox.setRange(10, 60)  # Мінімальна к-сть секунд - 30, максимальна - 60
         self.timer_spinbox.setValue(15)  # Значення за замовчуванням
         form_layout.addRow(self.timer_label, self.timer_spinbox)
 

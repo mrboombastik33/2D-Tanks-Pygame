@@ -1,6 +1,6 @@
 import pygame as pg
-from My_Project_OOP.additional.Direction import Direction
-from My_Project_OOP.additional.settings import *
+from additional.Direction import Direction
+from additional.settings import *
 
 def load_controls(file_path):
     with open(file_path, "r") as file:

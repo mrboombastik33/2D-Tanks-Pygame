@@ -1,6 +1,6 @@
 import sys
-from My_Project_OOP.Sprites.Tank import Tank
-from My_Project_OOP.Sprites.Block import Block
+from Sprites.Tank import Tank
+from Sprites.Block import Block
 from calling_functions import *
 from Timer import Timer
 

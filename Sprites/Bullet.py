@@ -1,8 +1,8 @@
 import pygame
-from My_Project_OOP.Sprites.Sprite import Sprite
-from My_Project_OOP.Sprites import Block
-from My_Project_OOP.additional.Direction import Direction
-from My_Project_OOP.additional.settings import *
+from Sprites.Sprite import Sprite
+from Sprites import Block
+from additional.Direction import Direction
+from additional.settings import *
 
 class Bullet(Sprite):
     def __init__(self, image_link, x, y, vector, shooter):
@@ -29,7 +29,7 @@ class Bullet(Sprite):
             self.kill()
 
     def check_collision(self, group):
-        from My_Project_OOP.Sprites.Tank import Tank
+        from Sprites.Tank import Tank
         for obj in group:
             if obj is not self and not self.rect.colliderect(self.__shooter) and self.rect.colliderect(obj.rect):
                 if isinstance(obj, Block) and obj.breakable == 0:
