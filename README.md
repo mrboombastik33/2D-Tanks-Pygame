@@ -47,9 +47,19 @@ To install all necessary modules and dependencies required for the program to ru
 To make sure that everything goes well, in PyCharm config near "Run button" go to config <br/>
 ![image](https://github.com/user-attachments/assets/b01b20b8-3f34-4bb3-9a15-431b1b034fef) <br/>
 and change script for this <br/>
-![image](https://github.com/user-attachments/assets/14976ce1-5e68-4dc7-9585-bd4f98aca468) <br/>
+![image](https://github.com/user-attachments/assets/14976ce1-5e68-4dc7-9585-bd4f98aca468) 
 
+### *User instruction*
 
+*Controls:*
+
+- **Blue Tank**
+  - Move: `W`, `A`, `S`, `D`
+  - Shoot: `Space`
+
+- **Red Tank**
+  - Move: Arrow Keys (`↑`, `↓`, `←`, `→`)
+  - Shoot: `0` on the NumPad
 
 ### *Video of a gameplay*
 
