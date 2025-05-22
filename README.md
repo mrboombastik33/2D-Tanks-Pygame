@@ -53,9 +53,5 @@ and change script for this <br/>
 
 ### *Video of a gameplay*
 
-
-
-
-
-
+https://github.com/user-attachments/assets/77464a00-6eac-41b6-8942-6455bbe568fe
 
