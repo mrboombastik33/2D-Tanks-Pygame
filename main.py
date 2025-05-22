@@ -1,7 +1,7 @@
-import sys
+import pygame as pg
 from Sprites.Tank import Tank
 from Sprites.Block import Block
-from calling_functions import *
+from additional.settings import *
 from Timer import Timer
 
 class Game:
@@ -116,11 +116,11 @@ class Game:
 
         # Рух танку
         for tank in self.tanks:
-            direction = get_tank_direction(key, tank.number)
+            direction = tank.get_direction(key)
             tank.do_move(direction, self.all_sprites)
 
             # Механіка пострілу
-            bullet = tank_shoot(tank, key)
+            bullet = tank.shoot(key)
             if bullet:
                 self.bullets.append(bullet)
                 self.all_sprites.add(bullet)
