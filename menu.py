@@ -68,7 +68,6 @@ class MainMenu(QMainWindow):
         self.show()
         self.dialog = WinnersDialog(winners)
         self.dialog.exec()
-        # dialog.show()
 
 
 if __name__ == '__main__':

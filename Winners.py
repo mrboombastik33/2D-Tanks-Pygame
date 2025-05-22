@@ -13,9 +13,8 @@ class WinnersDialog(QDialog):
         layout.addWidget(winners_label)
         for i, winner in enumerate(winners, 1):
             round_label = QLabel(
-                f"Раунд {i}: {winner} ({'Синій танк' if winner == 1 else 'Червоний танк' if winner == 2 else 'Нічия'})"
+                f"Раунд {i}: {'Синій танк' if winner == 1 else 'Червоний танк' if winner == 2 else 'Нічия'}"
             )
-
             layout.addWidget(round_label)
 
         # Кнопка "Закрити"
