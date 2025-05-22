@@ -40,6 +40,8 @@ class Tank(Sprite):
 
         for obj in group:
             if obj is not self and self.check_collision(obj):
+                if isinstance(obj, Bullet) and obj.shooter != self:
+                    self.__health -= 1
                 self.rect = old_rect
                 return
 
@@ -95,4 +97,8 @@ class Tank(Sprite):
 
     def get_number(self):
         return self.number
+
+
+    def __str__(self):
+        return f'Танк отримав пошкодження. Залишилось 3 здоровя'
 
