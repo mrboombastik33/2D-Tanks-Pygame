@@ -2,7 +2,7 @@ from Sprites.Bullet import Bullet
 from Sprites.Sprite import Sprite
 from additional import Direction
 from additional.settings import *
-
+import pygame as pg
 
 class Tank(Sprite):
     def __init__(self, image_link, x, y, speed, number, health):
@@ -42,6 +42,34 @@ class Tank(Sprite):
             if obj is not self and self.check_collision(obj):
                 self.rect = old_rect
                 return
+
+    def get_direction(self, key):
+        tank1, tank2 = load_controls(JSON_FILE)
+        tank_controls = tank1 if self.number == 1 else tank2
+        direction = 0
+
+        if key[tank_controls["KEY_UP"]]:
+            direction = Direction.UP
+        elif key[tank_controls["KEY_DOWN"]]:
+            direction = Direction.DOWN
+        elif key[tank_controls["KEY_LEFT"]]:
+            direction = Direction.LEFT
+        elif key[tank_controls["KEY_RIGHT"]]:
+            direction = Direction.RIGHT
+        return direction
+
+    def shoot(self, key):
+        current_time = pg.time.get_ticks()
+
+        shooter1, shooter2 = load_controls(JSON_FILE)
+        tank_controls = shooter1 if self.number == 1 else shooter2
+
+        if key[tank_controls["SHOOT"]] and current_time - self.last_fire_time >= FIRE_INTERVAL:
+            self.last_fire_time = current_time
+            bullet = self.fire(f'{SPRITE_IMAGES}/bulletBlue1.png') if self.number == 1 else self.fire(
+                f'{SPRITE_IMAGES}/bulletRed1.png')
+            return bullet
+        return None
 
     def fire(self, image_link):
         bullet_offsets = {
