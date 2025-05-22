@@ -3,6 +3,7 @@ from Sprites.Tank import Tank
 from Sprites.Block import Block
 from additional.settings import *
 from Timer import Timer
+from additional import Direction
 
 class Game:
     def __init__(self, round_time, total_rounds):
@@ -43,8 +44,8 @@ class Game:
         self.list_of_blocks = []
         self.create_map_blocks()
 
-        tank1 = Tank(f'{SPRITE_IMAGES}/tank_blue.png', 90, 100, 2, 1, 3)
-        tank2 = Tank(f'{SPRITE_IMAGES}/tank_red.png', 600, 500, 2, 2, 3)
+        tank1 = Tank(f'{SPRITE_IMAGES}/tank_blue.png', 90, 100, 2, 1, 3, Direction.DOWN.value)
+        tank2 = Tank(f'{SPRITE_IMAGES}/tank_red.png', 600, 500, 2, 2, 3, Direction.UP.value)
 
         self.tanks = [tank1, tank2]
         self.all_sprites.add(tank1)

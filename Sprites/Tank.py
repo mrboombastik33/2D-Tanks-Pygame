@@ -5,14 +5,17 @@ from additional.settings import *
 import pygame as pg
 
 class Tank(Sprite):
-    def __init__(self, image_link, x, y, speed, number, health):
+    def __init__(self, image_link, x, y, speed, number, health, direction):
         super().__init__(image_link, x, y)
         self.__speed = speed
-        self.direction = Direction.DOWN.value
+        self.direction = direction
         self.number = number
         self.last_fire_time = 0
         self.__health = health
         self.starting_rect = self.rect.copy()
+
+        self.set_rotation(self.direction)
+
 
     def set_rotation(self, direction):
         self.direction = direction
