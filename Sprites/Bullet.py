@@ -28,13 +28,15 @@ class Bullet(Sprite):
             bullets.pop(bullets.index(self))
             self.kill()
 
-
-
     def check_collision(self, group):
         for obj in group:
             if obj is not self and not self.rect.colliderect(self.shooter) and self.rect.colliderect(obj.rect):
-                if isinstance(obj, Block) and not obj.breakable:
-                    obj.kill()
+                if isinstance(obj, Block):
+                    if not obj.breakable:
+                        print(f"Танк {self.shooter.number} попав в ящик")
+                        obj.kill()
+                    else:
+                        print(f"Танк {self.shooter.number} попав в перегородуку")
                 return True
 
 

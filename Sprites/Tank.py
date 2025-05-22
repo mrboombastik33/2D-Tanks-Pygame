@@ -45,6 +45,7 @@ class Tank(Sprite):
             if obj is not self and self.check_collision(obj):
                 if isinstance(obj, Bullet) and obj.shooter != self:
                     self.__health -= 1
+                    print(f'Танк : {self.number}, Поточне здоров`я : {self.__health}')
                 self.rect = old_rect
                 return
 
