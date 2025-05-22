@@ -1,8 +1,7 @@
 import sys
-import PyQt6
 from PyQt6.QtWidgets import (
-    QApplication, QMainWindow, QVBoxLayout, QHBoxLayout, QLabel,
-    QSpinBox, QPushButton, QWidget, QFormLayout
+    QApplication, QMainWindow, QHBoxLayout,
+    QSpinBox, QWidget, QFormLayout
 )
 from Winners import *
 from main import Game
